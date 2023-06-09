@@ -133,7 +133,7 @@ elif current_page == "Upload-generate-check-quality-score":
             start_time = time.time()
             with st.spinner('Loading...'):
                  time.sleep(78)
-            st.write('For VAE-CVAE')
+            st.write('For CVAE')
             one_hot_encoder,condition_encoder,dataframe,features,condition_features,select_input_column,select_conditional_column,encoder,decoder,latent_dims,condition_data,encoded_features = vae_cvae_synthetic_generation(dataframe,select_input_column,select_conditional_column,lr_rate,latent_dims,select_epoch,select_batchsize)
             synthetic = generate_synthetic_data(one_hot_encoder,condition_encoder,samples,dataframe,features,condition_features,select_input_column,select_conditional_column,encoder,decoder,latent_dims,condition_data,encoded_features)
             
@@ -331,7 +331,7 @@ elif current_page == "Upload-generate-check-quality-score":
 
 
                 
-                scores_df = pd.DataFrame({ 'Model': ['VAE_CVAE', 'VAE', 'CopulaGAN', 'FAST_ML', 'Gaussian Copula', 'CTGAN', 'TVAE'], 'Quality Score': [a, b, c, d, e, f, g] })  
+                scores_df = pd.DataFrame({ 'Model': ['CVAE', 'VAE', 'CopulaGAN', 'FAST_ML', 'Gaussian Copula', 'CTGAN', 'TVAE'], 'Quality Score': [a, b, c, d, e, f, g] })  
                 # st.dataframe(scores_df)
                 # scores_df = scores_df.sort_values('Quality Score')
                 # st.line_chart(scores_df)
@@ -346,7 +346,7 @@ elif current_page == "Upload-generate-check-quality-score":
                 # st.line_chart(scores_df,x='Model',y='Quality Score')
 
 
-                model_names = ['VAE_CVAE', 'VAE', 'CopulaGAN', 'FAST_ML', 'Gaussian Copula', 'CTGAN', 'TVAE']
+                model_names = ['CVAE', 'VAE', 'CopulaGAN', 'FAST_ML', 'Gaussian Copula', 'CTGAN', 'TVAE']
                 reshaped_df = pd.DataFrame(columns=['Column', 'Metric'])
                 dfs = [x1, x2, x3, x4, x5, x6, x7]
                 for df, model in zip(dfs, model_names):
@@ -364,7 +364,7 @@ elif current_page == "Upload-generate-check-quality-score":
 
 
 
-                check_winner = {'VAE-CVAE': a, 'VAE': b, 'CopulaGAN': c, 'Fast_ML': d,'Gaussian Copula':e,'CTGAN':f,'TVAE':g}
+                check_winner = {'CVAE': a, 'VAE': b, 'CopulaGAN': c, 'Fast_ML': d,'Gaussian Copula':e,'CTGAN':f,'TVAE':g}
                 winner = max(check_winner, key=check_winner.get)
                 st.markdown("<h4 style='text-align: left; color: #e4b016;'>The best quality score is: {}</h4>".format(winner), unsafe_allow_html=True)
                 end_time = time.time()
