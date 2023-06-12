@@ -46,7 +46,7 @@ if current_page == "About the App":
     with tab1:
 
         st.subheader("Upload your real data")
-        st.image("data.jpg")
+        st.image("data1.png")
         expander = st.expander("Click Me for more info")
         expander.write("Hi User! This app will help you to generate synthetic data with different synthesizers. Just be ready with your real data!")
 
@@ -91,7 +91,8 @@ if current_page == "About the App":
 elif current_page == "Upload-generate-check-quality-score":
     st.title("Welcome to the world of generating synthetic data!")
     image = Image.open('header.png')
-    st.image(image, caption='Synthetic Data Generation')
+    st.image(image)
+    # st.image(image, caption='Synthetic Data Generation')
     uploaded_file = st.file_uploader("Please upload your real data")
     if uploaded_file is not None:
         st.success('Data uploaded Successfully!', icon="✅")
@@ -109,24 +110,67 @@ elif current_page == "Upload-generate-check-quality-score":
    
         dataframe= pd.read_csv(uploaded_file)
         st.write(dataframe)
+        st.write('Shape of real data :',dataframe.shape)
+        # link_text = "Click here to know more about the input columns"
+        # toggle_code = """
+        # <script>
+        # function toggleExpander() {
+        #     var expander = document.getElementById("expander");
+        #     expander.classList.toggle("hidden");
+        # }
+        # </script>
+        # """
+        # st.markdown(f'<a href="javascript:toggleExpander()">{link_text}</a>', unsafe_allow_html=True)
+        # with st.expander("Expanded Information"):
+        #     st.write("This is the expanded information.")
+        # container = st.container()
+        # container.markdown(f'<a href="javascript:void(0)" onclick="if(document.getElementById(\'expander\').style.display === \'none\') {{ document.getElementById(\'expander\').style.display = \'block\'; }} else {{ document.getElementById(\'expander\').style.display = \'none\'; }}">{link_text}</a>', unsafe_allow_html=True)
+        # expander_visible = container.columns(1)[0].checkbox("Click me to know more about input columns", key="expander")
+        # if expander_visible:
+        #     st.write("Input column.")
+
+
+
         select_input_column = st.multiselect('Select input columns for CVAE',options=list(dataframe.columns),key="1")
         st.write(select_input_column)
+        # st.sidebar.title("Preview")
+        # for option in select_input_column:
+        #     st.sidebar.write(option)
+        container = st.container()
+        expander_visible = container.columns(1)[0].checkbox("Click the checkbox to know more about conditional columns", key="5")
+        if expander_visible:
+            st.write("A conditional column in CVAE is a column of data that is used to condition the output of the model. This means that the model will generate output that is specific to the data in the conditional column. For example, if the conditional column is a label, the model will generate output that is consistent with that label. Conditional columns can be used to improve the accuracy and performance of CVAE models.")
+            st.write("Make sure you don't input VIN/USER_ID/NAME")
+            st.write("Columns entered in input column can't be re-entered.")
+
         select_conditional_column = st.multiselect('Select conditional columns for CVAE',options=list(dataframe.columns))
         st.write(select_conditional_column)
+        container = st.container()
+        expander_visible1 = container.columns(1)[0].checkbox("Click the checkbox to know more about input columns", key="6")
+        if expander_visible1:
+            st.write("Input columns can be features/labels/targets/ouputs.")
+            st.write("Make sure you don't input VIN/USER_ID/NAME")
+
         select_input_column_vae = st.multiselect('Select input columns for VAE',options=list(dataframe.columns),key="2")
         st.write(select_input_column_vae)
-        st.info('Primary key should be the unique identified column such as user_id/VIN', icon="ℹ️")
+        st.info('Primary key should be the unique identified column such as user_id/VIN/Name. Metadata is a set of data that describes the data itself. This includes information such as the data types, the column names, and the relationships between the columns. Metadata is used by the synthesizer to generate synthetic data that is similar to the real data.', icon="ℹ️")
         pk_metadata=st.selectbox('Select your primary key to generate metadata',options=list(dataframe.columns))
         st.write(pk_metadata)
         lr_rate=st.number_input('Input the learning rate',min_value=0.01)
         st.write(lr_rate)
+        container = st.container()
+        expander_visible2 = container.columns(1)[0].checkbox("Click the checkbox to know more about Latent Dimension", key="7")
+        if expander_visible2:
+            st.write("The latent dimension is defined by the number of dimensions of the mean and variance vectors. Each dimension in the latent space can be considered as a latent variable or latent feature that captures certain characteristics of the input data. By choosing an appropriate latent dimension, the VAE can learn a compact representation of the data that captures the most important aspects while discarding unnecessary details.")
+            st.write("The choice of latent dimension is a hyperparameter that needs to be tuned during the training process to achieve a balance between representation power and simplicity.")
+            st.write("NOTE- preferably the latent space should be less than that of the input dimension")
         latent_dims=st.number_input('Input the latent dimension',min_value=1)
         st.write(latent_dims)
         select_epoch=st.number_input('Input the epoch',min_value=1)
         st.write(select_epoch)
         select_batchsize=st.number_input('Input the batch size',min_value=1)
         st.write(select_batchsize)
-        samples = st.number_input('How many data points you want to generate?',min_value=1)
+        samples = st.number_input('How many number of rows you want to generate?',min_value=1)
         st.write(samples)
         
         if st.button('Generate and Save Synthetic Data'):
@@ -341,7 +385,7 @@ elif current_page == "Upload-generate-check-quality-score":
                 # st.line_chart(scores_df_sorted, x='Model', y='Quality Score')
                 # scores_df_sorted['Quality Score'] = scores_df_sorted['Quality Score'].sort_index(ascending=True)
                 # scores_df_sorted['Quality Score'] = scores_df_sorted['Quality Score'][::-1] 
-                st.line_chart(scores_df_sorted, y='Model', x='Quality Score')
+                st.line_chart(scores_df_sorted, x='Model', y='Quality Score')
 
                 # st.line_chart(scores_df,x='Model',y='Quality Score')
 
